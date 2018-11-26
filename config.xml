@@ -1,7 +1,7 @@
 <?xml version= "1.0" encoding ="UTF-8" ?>
 <widget xmlns = "http://www.w3.org/ns/widgets"
 	xmlns:gap = "http://phonegap.com/ns/1.0"
-	id = "com.gs.Heart"
+	id = "com.gs.HeartApp"
 	versionCode ="1"
 	version = "1.0.0">
 
@@ -13,4 +13,22 @@
 		email= "chitseedam@gmail.com">
 		chitra seedam
 	</author>
+
+	<plugin name="cordova-plugin-geolocation" spec="~4.0.1" />
+
+	<platform name="android">
+		<icon src="icon.png" density="ldpi" />
+		<icon src="icon.png" density="mdpi" />
+        <icon src="icon.png" density="hdpi" />
+        <icon src="icon.png" density="xhdpi" />
+        <icon src="icon.png" density="xxhdpi" />
+        <icon src="icon.png" density="xxxhdpi" />
+
+        <splash src="splash.png" density="ldpi" />
+		<splash src="splash.png" density="mdpi" />
+        <splash src="splash.png" density="hdpi" />
+        <splash src="splash.png" density="xhdpi" />
+        <splash src="splash.png" density="xxhdpi" />
+        <splash src="splash.png" density="xxxhdpi" />
+	</platform>
 </widget>
