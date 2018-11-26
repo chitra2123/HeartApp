@@ -5,11 +5,11 @@
 	<meta name="viewport" charset="utf-8" content="width=device-width , initial-scale=1">
 
 	<link rel="stylesheet" type="text/css" href="jquery.mobile-1.4.5.min.css">
-	
 	<script src="jquery.js"></script>
-
-<script src="jquery.mobile-1.4.5.js"></script>
+	<script src="jquery.mobile-1.4.5.js"></script>
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<link rel="stylesheet" type="text/css" href="leaflet.css">
+	<script src="leaflet.js"></script>
 
 	<style>
 			body{
@@ -22,17 +22,108 @@
 			}
 		</style>
 
+
+		<script type="text/javascript">
+
+		if(navigator.geolocation==undefined){
+			alert("Geolocation undefined");
+		}else{
+			//alert("Geolocation Available");
+			navigator.geolocation.getCurrentPosition(userLocated, locationError);
+			function userLocated(position){
+				var latitude = position.coords.latitude;
+				var longitude = position.coords.longitude;
+
+
+				//alert("Lat:"+latitude+",Long:"+longitude);
+
+
+						var mymap = L.map('mapid').setView([latitude, longitude], 13);
+						L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', { maxZoom: 18, attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+						'<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' + 'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+						id: 'mapbox.streets'
+								}).addTo(mymap);
+
+
+						L.marker([latitude, longitude]).addTo(mymap)
+						    .bindPopup("You're here.")
+						     .openPopup();
+
+						     var circle = L.circle([-20.097438, 57.560088], {
+						    color: 'red',
+						    fillColor: '#f03',
+						    fillOpacity: 0.5,
+						    radius: 200
+						}).addTo(mymap).bindPopup("SSRN Cardiac Centre Mauritius.")
+						     .openPopup();
+
+									}
+									function locationError(error){
+										switch(error.code){
+											case error.PERMISSION_DENIED:
+											alert("Permission Denied-" + error.message);
+											break;
+											
+											case error.POSITION_UNAVAILABLE:
+											alert("Position Not Available-" + error.message);
+											break;
+
+											case error.TIMEOUT:
+											alert("Request Time Out-" + error.message);
+											break;
+										}
+									}//end the function
+								}//end else block
+
+							</script>
+
+							<script>
+								//swiping left right
+
+
+									$(document).on('swipeleft swiperight', function (event) {
+									        
+									        if(event.type == 'swiperight') {
+									            var prevpage = '#' + $.mobile.activePage.prev('div[data-role="page"]')[0].id;
+									                if(prevpage == '#home'|| prevpage == '#types' || prevpage == '#diet' 
+									                    || prevpage == '#test' || prevpage == '#healthtrack' || prevpage == '#bp' 
+									                    || prevpage == '#bmi'|| prevpage == '#about'|| prevpage == '#locateuser'){
+									                    $.mobile.changePage(prevpage, {
+									                    transition: 'swipe',
+									                    reverse: false
+									                });
+									            }    
+									        }
+
+									       
+									        if(event.type == 'swipeleft') {
+									            var nextpage = '#' + $.mobile.activePage.next('div[data-role="page"]')[0].id;
+									                if(nextpage == '#locateuser' || nextpage == '#about' ||  nextpage == '#bmi'
+									                 || nextpage == '#bp' ||  nextpage == '#healthtrack' ||  nextpage == '#test' || nextpage =='#diet' ||
+									                  nextpage == '#types' ||  nextpage == '#home'){
+									                    $.mobile.changePage(nextpage, {
+									                    transition: 'swipe',
+									                    reverse: true
+									                });
+									            }
+									        }  
+
+									    });
+
+									// close swiping left right
+							</script>
+
 	</head>
 	<body>
 		<div data-role="page" id="home">
 
 				<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
-					<div data-role="controlgroup">
+					
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
-						<a href="#" data-role="button" data-theme="a">Contact</a>
-						<a href="#locateuser" data-role="button"data-theme="a">Find Cardiac Unit</a>
-					</div>
+						<a href="#about" data-role="button">About</a>
+						<a href="#" data-role="button">Contact</a>
+						<a href="#locateuser" data-role="button">Find Cardiac Unit</a>
+
 				</div>
 				
 				<div data-role="header" data-theme="b" data-content-theme="b">
@@ -122,7 +213,7 @@
 <!--start Map-->
 	<div data-role="page" id="locateuser">
 			<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -130,16 +221,16 @@
 						<a href="#test" data-role="button">Quiz</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
-					<div data-role="controlgroup">
+					
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
-						<a href="#" data-role="button" data-theme="a">Contact</a>
+						<a href="#about" data-role="button">About</a>
+						<a href="#" data-role="button">Contact</a>
 						<!-- <a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a> -->
-					</div>
+					
 				</div>
 				
 				<div data-role="header" data-theme="b" data-content-theme="b">
@@ -149,6 +240,75 @@
 				</div>
 
 				<div data-role="main" class="ui-content">
+					<h1 style="text-align: center;">Sir Seewoosagur Ramgoolam National Hospital (SSRNH)</h1>
+					<p style="color: black;">
+						PAMPLEMOUSSES<br>
+						Tel No. (+230)209-3500<br>
+						Fax No. (+230)243-8965<br><br>
+
+						The Cardiac Centre is within the hospital compound.Within its catchments area there is the specialised hospital in respiratory diseases of Poudre d'Or.
+					</p>
+					<div id="mapid" style="width: 350px; height: 600px;"></div>
+				</div>
+
+				<div data-role="footer" style="color:#fff; background-color:#000; border:1px;">
+					<center><font size="2px">&copy; Copyright_allrightreserved_2018</font></center>
+				</div>
+		</div>
+
+<!--end Map -->
+
+
+<!--start aboutus-->
+	<div data-role="page" id="about">
+			<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
+
+						<strong data-role="divider" data-theme="b">Menu</strong>
+						<a href="#home" data-role="button">Home</a>
+						<a href="#types" data-role="button">Types of HeartDiseases</a>
+						<a href="#healthtrack" data-role="button">Track your Blood Pressure</a>
+						<a href="#diet" data-role="button">Diet &amp; Exercises</a>
+						<a href="#test" data-role="button">Quiz</a>
+						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
+						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
+
+			</div>
+
+			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
+
+						<strong data-role="divider">Options</strong>
+						<a href="#" data-role="button">Contact</a>
+						<a href="#locateuser" data-role="button">Find Cardiac Unit</a>
+
+				</div>
+				
+				<div data-role="header" data-theme="b" data-content-theme="b">
+					<a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a>
+					<h1>HeartDiseases App</h1>
+					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>
+				</div>
+
+				<div data-role="main" class="ui-content">
+					<h1 style="text-align: center;">ABOUT THE APP</h1>
+					<p style="color: black;">
+						&copy; Copyright<br> 
+						All rights reserved.<br>
+						<i>First of all its a coursework for UTM Course Web Technologies</i><br><br>
+
+						On a mission to reduce fatalities due to heart diseases.<br><br>
+
+						This app aims to helps people find out if they are at risk of, or are developing any heart diseases.<br><br>
+
+						The app is meant solely for the welfare of common people and thus been kept free from advertisements. But we cannot promote it without your help, so we request you to share the app with your family and friends, and contribute to our small effort of fighting heart diseases which claim millions od innocent lives.<br><br>
+
+						<strong>Developed by:</strong>
+						Chitra &amp; Dylan.
+						From University of Technology, Mauritius.
+					</p>
+				</div>
+
+				<div data-role="footer" style="color:#fff; background-color:#000; border:1px;">
+					<center><font size="2px">&copy; Copyright_allrightreserved_2018</font></center>
 				</div>
 		</div>
 
@@ -158,24 +318,24 @@
 <!--start diet-->
 	<div data-role="page" id="diet">
 			<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+					
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
-						<a href="#types" data-role="button">Types of HeartDiseases</a>
-						<a href="#diet" data-role="button">Diet &amp; Exercises</a>
+						<a href="#types" data-role="button">Types of HeartDiseases</a>					
 						<a href="#test" data-role="button">Quiz</a>
+						<a href="#healthtrack"  data-role="button">Track your Blood Pressure</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+				
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
-					<div data-role="controlgroup">
+					
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
-						<a href="#" data-role="button" data-theme="a">Contact</a>
-						<!-- <a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a> -->
-					</div>
+						<a href="#about" data-role="button">About</a>
+						<a href="#" data-role="button">Contact</a>
+						<a href="#locateuser" data-role="button">Find Cardiac Unit</a>
+					
 				</div>
 				
 				<div data-role="header" data-theme="b" data-content-theme="b">
@@ -185,6 +345,100 @@
 				</div>
 
 				<div data-role="main" class="ui-content">
+					<h1 style="text-align: center;">Diet and Exercise for a Healthy Heart</h1>
+
+					<p style="color: black;"><strong>Your heart is the center of your cardiovascular system. It is involved in many of the daily functions that bring your body to life. So having a healthy heart is vital to your overall health. Two of the simplest yet most important ways to help your heart health are through diet and exercise.</strong></p>
+
+					<h2>Path to improved health</h2>
+					<h3><i>Diet</i></h3>
+						<h3>How does what I eat affect my heart?</h3>
+							<p style="color: black;">The foods you eat can affect your weight, your hormones, and the health of your organs, including your heart. Eating a healthy diet can help reduce the risk of heart disease and stroke.</p> 
+
+							<p style="color: black;">Keeping your heart healthy by making healthier food choices isn’t as hard as it sounds! Just follow these tips for a heart-healthy diet:</p>
+								<br>
+							<ul>
+							<li><strong> Choose healthy fats.</strong> Despite what you may have heard, some fats are actually good for you. When you use fats for cooking, choose monounsaturated fats, such as olive oil or canola oil. Avocados are also a good source of monounsaturated fat. Polyunsaturated fats and omega-3 fatty acids are also healthy choices. Polyunsaturated fats are found in nuts and seeds. Omega-3 fats are found in fish such as tuna and salmon. In general, you should try to avoid trans fats. Trans fats are usually found in processed foods and snacks such as crackers or snack cakes. To see whether a food contains trans fats, look for the words “partially hydrogenated” in the ingredient label.</li>
+								<br>
+							<li><strong>  Go whole-grain.</strong> Whole-grain breads or pastas are higher in fiber and complex carbohydrates. Choose them instead of white breads or regular pastas for sandwiches and meals.</li>
+								<br>
+							<li><strong> Eat plenty of fruits and vegetables.</strong> They contain fiber, vitamins and minerals that are good for your body. They also add flavor and variety to your diet.</li>
+								<br>
+							<li><strong>Prepare meat healthfully.</strong> Baking, broiling and roasting are the healthiest ways to prepare meat and poultry. Trim any outside fat or skin before cooking. Lean cuts can be pan-broiled or stir-fried.</li>
+								<br>
+							<li><strong> Don’t forget beans.</strong> Dry beans, peas, and lentils offer protein and fiber. Once in a while, try substituting beans for meat in a favorite recipe, such as lasagna or chili.</li>
+								<br>
+							<li><strong> Choose low-fat dairy.</strong> Go for fat-free or low-fat versions of milk, yogurt, and cheese products. Eat no more than 4 egg yolks a week (use egg whites or egg substitutes).</li>
+						</ul>
+
+						<h3>What should I NOT eat?</h3>	
+							<p style="color: black;">
+								 <strong> Sodium.</strong>The foods you eat can affect your weight, your hormones, and the health of your organs, including your heart. Eating a healthy diet can help reduce the risk of heart disease and stroke.
+								 <br><br>
+								 <strong> Saturated and trans fats.</strong>Saturated fats are found in fatty meats, poultry skin, whole-milk dairy, butter, lard, and coconut and palm oils. Tans fats are found in some desserts, microwave popcorn, frozen pizza, stick margarines, and coffee creamers. Look for the words partially hydrogenated oil on the food label.
+								 <br><br>
+								 <strong> Alcohol.</strong>Limit your intake of alcohol. Men should have no more than 2 drinks a day. Women should have no more than 1 drink per day. Too much alcohol can raise your blood pressure and cause you to gain weight. It can also contribute to or worsen heart failure in some people.
+								 </p> <br>
+
+						<h3>How much should I weigh?</h3> 
+							<p style="color: black;">Talk to your family doctor about your ideal weight, because every person is different. If you’re overweight, the extra pounds put extra stress on your heart. Losing weight can help your heart stay healthy. Remember that losing just 10% of your body weight will reduce your risks for diabetes and heart disease.<p><br>
+
+						<h3>Exercise</h3>		
+							<p style="color: black;">Exercise makes your heart stronger. This helps it pump more blood with each heartbeat. This delivers more oxygen to your body. With more oxygen, your body functions more efficiently.<br><br>
+
+							Exercise can also lower blood pressure. It reduces your risk of heart disease and reduces levels of LDL (“bad” cholesterol). Bad cholesterol can clog the arteries and can cause a heart attack. At the same time, exercise can raise levels of HDL (“good” cholesterol). HDL helps protect against a heart attack by carrying fatty deposits out of the arteries.<br><br>
+
+							When combined with a healthy diet, exercise can speed up weight loss. Regular exercise builds lean muscle, which burns more calories than fat. This helps you burn calories faster, even when you’re sitting still.</p><br>
+
+						<h3>What’s the best type of exercise for my heart?</h3>
+							<p style="color: black;">Aerobic exercise causes you to breathe more deeply. It makes your heart work harder to pump blood. Aerobic exercise also raises your heart rate (which burns calories). Examples of aerobic exercise include walking, jogging, running, dancing, swimming, and bicycling.</p><br>
+
+						<h3>How much exercise do I need?</h3>
+							<p style="color: black;">If you haven’t been exercising, try to work up to 30 minutes, 4 to 6 times a week. Your doctor may recommend a different exercise regimen based on your health. Alternate exercise days with rest days or days you do a very different type of exercise. This will help prevent injuries.</p><br>
+
+						<h3>How will I fit exercise into my busy schedule?</h3>
+
+							<p style="color: black;">There are lots of ways to raise your heart rate during your regular day. Some examples include:</p><br>
+
+							<ul>
+								<li> Take the stairs instead of the elevator.</li><br>
+								<li>Walk during a coffee break or lunch.</li><br>
+								<li> Walk to work, or park at the end of the parking lot so you have to walk further.</li><br>
+								<li> Walk more briskly.</li><br>
+								<li> Do housework at a quicker pace and more often (for example, vacuuming every day).</li><br>
+								<li> Rake leaves, mow your lawn, or do other yard work.</li><br>
+							</ul>
+
+						<h3>Things to consider</h3>
+							<p style="color: black;">Diet and exercise are an important part of your heart health. If you don’t eat a good diet and you don’t exercise, you are at increased risk of developing health problems. These include high blood pressure, high cholesterol, obesity, type 2 diabetes, and heart disease. These increase your risk of heart attack and stroke.</p><br>
+
+						<h3>Questions to ask your doctor</h3>
+							<ul>
+								<li>Should I eat a special diet to keep my heart healthy?</li><br>
+								<li>What types of foods should I eat?</li><br>
+								<li>I am overweight. How can I lose weight to make my heart healthier?</li><br>
+								<li>How does exercise help my heart?</li><br>
+								<li>How much should I exercise?</li><br>
+							</ul>
+
+						<h3>Resources</h3>
+							<ul style="color: orange">
+								<li><a href="http://www.who.int/cardiovascular_diseases/en/">World Health Organisation (WHO)</a></li>
+								<li><a href="https://www.who.int/countries/mus/en/">World Health Organisation (WHO)</a></li>
+								<li><a href="https://www.nhlbi.nih.gov/health-topics/heart-healthy-lifestyle-changes">Heart Healthy Life Changes</a></li>
+							</ul>
+
+							<p style="color: grey;"><i>
+								Some information adapted from Physicians Guide to Outpatient Nutrition, by Sylvia A. Moore, Ph.D., R.D., F.A.D.A. and John P. Nagle, M.P.A. American Academy of Family Physicians, Leawood, KS. 2001.
+								<br>
+								Last Updated: November 27, 2018<br>
+
+								Categories: Exercise and Fitness, Food and Nutrition, Healthy Living, Prevention and Wellness, Staying Healthy, Weight Loss and Diet Plans
+							</i></p>
+
+				</div>
+
+				<div data-role="footer" style="color:#fff; background-color:#000; border:1px;">
+					<center><font size="2px">&copy; Copyright_allrightreserved_2018</font></center>
 				</div>
 		</div>
 
@@ -194,7 +448,7 @@
 <!-- Starting health track page div -->
 	<div data-role="page" id="healthtrack">
 			<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -202,16 +456,16 @@
 						<a href="#test" data-role="button">Quiz</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
-					<div data-role="controlgroup">
+
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
-						<a href="#" data-role="button" data-theme="a">Contact</a>
-						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
-					</div>
+						<a href="#about" data-role="button">About</a>
+						<a href="#" data-role="button" >Contact</a>
+						<a href="#locateuser" data-role="button">Find Cardiac Unit</a>
+
 				</div>
 				
 				<div data-role="header" data-theme="b" data-content-theme="b">
@@ -221,16 +475,17 @@
 				</div>
 				
 				<div data-role="main" class="ui-content">
-					<h2>Small tips when measuring your Blood Pressure</h2>
+					<h2 style="text-align: center;">Small tips when measuring your Blood Pressure</h2>
 					<p style="color: black;">The first measurement should be in the morning before eating or taking any medications, and the second in the evening. Each time you measure, take two or three readings to make sure your results are accurate. You are recommended to take your blood pressure at the same times each day.</p>
 					<form>
-						<h2><legend>Insert Your Blood Pressure readings</legend></h2>
+						<h2 style="text-align: center;"><legend>Insert Your Blood Pressure readings</legend></h2>
 
 						<label for="number-pattern">SYS(mmHg):
 						<input type="number" name="txtsys" id="txtsysmm" pattern="[0-9]*" id="number-pattern" value="" maxlength="4" size="4"></label>
 						<br>
 						<label for="number-pattern">DIA(mmHg):
 						<input type="number" name="txtdia" id="txtdiamm" pattern="[0-9]*" id="number-pattern" value="" maxlength="4" size="4"></label><br>
+						
 						<div style="text-align:center;">
 							<input type="submit" value="Insert BP" id="btnstore" data-role="button" data-inline="true" name="" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">
 							<input type="reset" value="Reset" id="btnClear" data-role="button" data-inline="true" name="" class="ui-shadow ui-btn ui-corner-all ui-btn-inline ui-mini">
@@ -270,7 +525,6 @@
 
 		const key = d;
 
-		
 		const value = sysmm.value + "/" + diamm.value;
 
 
@@ -281,6 +535,8 @@
 			localStorage.setItem(key,value);
 			location.reload();
 		}
+
+		
 
 	};
 
@@ -314,7 +570,7 @@
 	<div data-role="page" id="bp" data-theme="a">
 
         	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+					
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -322,16 +578,16 @@
 						<a href="#test" data-role="button">Quiz</a>
 						<a href="#healthtrack" data-role="button">Blood Pressure Reading Track</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+					
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
-					<div data-role="controlgroup">
+					
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
-						<a href="#" data-role="button" data-theme="a">Contact</a>
-						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
-					</div>
+						<a href="#about" data-role="button">About</a>
+						<a href="#" data-role="button" >Contact</a>
+						<a href="#locateuser" data-role="button">Find Cardiac Unit</a>
+				
 				</div>
 
 
@@ -343,12 +599,12 @@
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Check your BP</h1>
-			<h3>Tips for Checking Your Own Blood Pressure</h3>
+				<h1 style="text-align: center;">Check your BP</h1>
+			<h3 style="text-align: center;">Tips for Checking Your Own Blood Pressure</h3>
 			<p style="color: black;">There are certain factors that can cause blood pressure to temporarily rise. For example, blood pressure normally rises as a result of: <strong>Stress, Smoking, Cold temperatures, Exercise, Caffeine and Certain medicines. </strong>Try to avoid as many of these factors as you can when taking your blood pressure. Also, try to measure your blood pressure at about the same time each day.</p>
 			<br>
 
-			<form>
+			<form id="bpressure">
 				<legend><strong>Blood Pressure Calculation</strong></legend>
 					<br>
 					<label for="number-pattern">SYS(mmHg):
@@ -428,7 +684,8 @@
 			 location.reload();
 		});
 
-		$('#btnbp').on('click',function(){
+		$("#bpressure").submit(function(e) {
+			e.preventDefault();
 
 			var sys = parseInt($('#txtsys').val());
 			var dia = parseInt($('#txtdia').val());
@@ -489,7 +746,7 @@
 
 
         	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#diet" data-role="button">Diet &amp; Exercises</a>
@@ -497,16 +754,16 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
-					<div data-role="controlgroup">
+
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
-						<a href="#" data-role="button" data-theme="a">Contact</a>
-						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
-					</div>
+						<a href="#about" data-role="button" >About</a>
+						<a href="#" data-role="button">Contact</a>
+						<a href="#locateuser" data-role="button">Find Cardiac Unit</a>
+
 				</div>
 
 
@@ -519,7 +776,7 @@
 
 			<div data-role="main" class="ui-content">
 				
-				<h1>Types of HeartDiseases recorded in Mauritius</h1>
+				<h1 style="text-align: center;">Types of HeartDiseases recorded in Mauritius</h1>
 
 				<ul data-role="listview" data-inset="true"> 
 					<li><a href="#coronary" data-transition="slide">Coronary</a></li> 
@@ -545,8 +802,8 @@
 	<div data-role="page" id="coronary" data-theme="a">
 
 
-        	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+        	<!-- <div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
+					 <div data-role="controlgroup"> 
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -555,28 +812,31 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+					</div>
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
 					<div data-role="controlgroup">
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
+						<a href="#about" data-role="button" data-theme="a">About</a>
 						<a href="#" data-role="button" data-theme="a">Contact</a>
-						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
+						<a href="#locateuser" data-role="button"data-theme="a">Find Cardiac Unit</a>
 					</div>
-				</div>
+				</div> -->
 
 
 				<div data-role="header" data-theme="b" data-content-theme="b">
-					<a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a>
+
+					<a href="#types" class="ui-btn-left">Back</a>
 					<h1>HeartDiseases App</h1>
-					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>
+					<!-- <a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a> 
+
+					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>-->
 				</div>
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Coronary heart disease</h1>
+				<h1 style="text-align: center;">Coronary heart disease</h1>
 
 				<h3>Description:</h3>
 				<p style="color: black;">Disease of the blood vessels supplying the heart muscle.</p>
@@ -602,8 +862,8 @@
 	<div data-role="page" id="stroke" data-theme="a">
 
 
-        	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+        	<!--<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
+					 <div data-role="controlgroup">
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -612,7 +872,7 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+					</div>
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
@@ -622,18 +882,20 @@
 						<a href="#" data-role="button" data-theme="a">Contact</a>
 						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
 					</div>
-				</div>
+				</div>-->
 
 
 				<div data-role="header" data-theme="b" data-content-theme="b">
-					<a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a>
+					<a href="#types" class="ui-btn-left">Back</a>
 					<h1>HeartDiseases App</h1>
-					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>
+					<!-- <a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a> 
+
+					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>-->
 				</div>
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Stroke</h1>
+				<h1 style="text-align: center;">Stroke</h1>
 
 				<h3>Description:</h3>
 				<p style="color: black;">Strokes are caused by disruption of the blood supply to the brain. This may result from either blockage (ischaemic stroke) or rupture of a blood vessel (haemorrhagic stroke).</p>
@@ -665,8 +927,8 @@
 	<div data-role="page" id="congenital" data-theme="a">
 
 
-        	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+        	<!--<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
+					 <div data-role="controlgroup"> 
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -675,7 +937,7 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+					</div>
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
@@ -685,18 +947,20 @@
 						<a href="#" data-role="button" data-theme="a">Contact</a>
 						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
 					</div>
-				</div>
+				</div>-->
 
 
 				<div data-role="header" data-theme="b" data-content-theme="b">
-					<a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a>
+					<a href="#types" class="ui-btn-left">Back</a>
 					<h1>HeartDiseases App</h1>
-					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>
+					<!-- <a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a> 
+
+					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>-->
 				</div>
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Congenital Heart Diseases</h1>
+				<h1 style="text-align: center;">Congenital Heart Diseases</h1>
 
 				<h3>Description:</h3>
 				<p style="color: black;">Malformations of heart structures existing at birth may be caused by genetic factors or by adverse exposures during gestation. Examples are holes in the heart, abnormal valves, and abnormal heart chambers.</p>
@@ -724,8 +988,8 @@
 	<div data-role="page" id="thrombosis" data-theme="a">
 
 
-        	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+        	<!--<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
+					 <div data-role="controlgroup">
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -734,7 +998,7 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+					</div>
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
@@ -744,18 +1008,20 @@
 						<a href="#" data-role="button" data-theme="a">Contact</a>
 						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
 					</div>
-				</div>
+				</div>-->
 
 
 				<div data-role="header" data-theme="b" data-content-theme="b">
-					<a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a>
+					<a href="#types" class="ui-btn-left">Back</a>
 					<h1>HeartDiseases App</h1>
-					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>
+					<!-- <a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a> 
+
+					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>-->
 				</div>
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Deep venous thrombosis (DVT) and pulmonary embolism </h1>
+				<h1 style="text-align: center;">Deep venous thrombosis (DVT) and pulmonary embolism </h1>
 
 				<h3>Description:</h3>
 				<p style="color: black;">Blood clots in the leg veins, which can dislodge and move to the heart and lungs.</p>
@@ -789,8 +1055,8 @@
 	<div data-role="page" id="arterial" data-theme="a">
 
 
-        	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+        	<!--<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
+					 <div data-role="controlgroup">
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -799,7 +1065,7 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+					</div>
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
@@ -809,18 +1075,20 @@
 						<a href="#" data-role="button" data-theme="a">Contact</a>
 						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
 					</div>
-				</div>
+				</div>-->
 
 
 				<div data-role="header" data-theme="b" data-content-theme="b">
-					<a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a>
+					<a href="#types" class="ui-btn-left">Back</a>
 					<h1>HeartDiseases App</h1>
-					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>
+					<!-- <a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a> 
+
+					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>-->
 				</div>
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Peripheral arterial disease</h1>
+				<h1 style="text-align: center;">Peripheral arterial disease</h1>
 
 				<h3>Description:</h3>
 				<p style="color: black;">Disease of the arteries supplying the arms and legs.</p>
@@ -847,8 +1115,8 @@
 	<div data-role="page" id="failure" data-theme="a">
 
 
-        	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+        	<!-- <div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
+					 <div data-role="controlgroup"> 
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -857,7 +1125,7 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+					</div>
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
@@ -867,18 +1135,20 @@
 						<a href="#" data-role="button" data-theme="a">Contact</a>
 						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
 					</div>
-				</div>
+				</div>-->
 
 
 				<div data-role="header" data-theme="b" data-content-theme="b">
-					<a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a>
+					<a href="#types" class="ui-btn-left">Back</a>
 					<h1>HeartDiseases App</h1>
-					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>
+					<!-- <a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a> 
+
+					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>-->
 				</div>
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Heart failure</h1>
+				<h1 style="text-align: center;">Heart failure</h1>
 
 				<h3>Description:</h3>
 				<p style="color: black;">Heart can't pump enough blood and oxygen to your muscles and organs</p>
@@ -906,8 +1176,8 @@
 	<div data-role="page" id="arrest" data-theme="a">
 
 
-        	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+        	<!--<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
+					 <div data-role="controlgroup"> 
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -916,7 +1186,7 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+					</div>
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
@@ -926,18 +1196,20 @@
 						<a href="#" data-role="button" data-theme="a">Contact</a>
 						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
 					</div>
-				</div>
+				</div>-->
 
 
 				<div data-role="header" data-theme="b" data-content-theme="b">
-					<a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a>
+					<a href="#types" class="ui-btn-left">Back</a>
 					<h1>HeartDiseases App</h1>
-					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>
+					<!-- <a href="#menu" data-icon="grid" class="ui-btn-left">Menu</a> 
+
+					<a href="#option" data-icon="gear" class="ui-btn-right">Option</a>-->
 				</div>
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Cardiac arrest</h1>
+				<h1 style="text-align: center;">Cardiac arrest</h1>
 
 				<h3>Description:</h3>
 				<p style="color: black;">Cardiac arrest occurs when the rhythm of the heart stops.</p>
@@ -976,24 +1248,24 @@
 
 
         	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
-						<strong data-role="divider" data-theme="b">Menu</strong>
+					
+						<strong data-role="divider">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
 						<a href="#diet" data-role="button">Diet &amp; Exercises</a>
 						<a href="#test" data-role="button">Quiz</a>
 						<a href="#healthtrack" data-role="button">Blood Pressure Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
-					<!--</div>-->
+					
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
-					<div data-role="controlgroup">
+					
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
-						<a href="#" data-role="button" data-theme="a">Contact</a>
-						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
-					</div>
+						<a href="#about" data-role="button">About</a>
+						<a href="#" data-role="button">Contact</a>
+						<a href="#locateuser" data-role="button">Find Cardiac Unit</a>
+					
 				</div>
 
 
@@ -1005,7 +1277,7 @@
 
 
 			<div data-role="main" class="ui-content">
-				<h1>Check your Body Mass Index-BMI and Maxinum Heart Rate-MHR</h1>
+				<h1 style="text-align: center;">Check your Body Mass Index-BMI and Maxinum Heart Rate-MHR</h1>
 			<h3>What is BMI and what is it's importance?</h3>
 			<p style="color: black;">The body mass index (BMI) is a measure that uses your height and weight to work out if your weight is healthy. BMI is used for risk assessment for the general population. Generally speaking, as a person's BMI increases, so does his or her risk of certain diseases. Body mass index (BMI) is the recommended method for diagnosing overweight and obesity.</p>
 			
@@ -1079,7 +1351,7 @@
 					  </tr>					
 					</table>
 	<!--MHR-->		
-			<h3>What is Maximum Heart Rate (RHR)?</h3>
+			<h3 style="text-align: center;">What is Maximum Heart Rate (RHR)?</h3>
 			<p style="color: black;">MHR: Maximum Heart Rate. It equals the maximum number of beats that your heart can perform in one minute. Your maximum heart rate calculation (MHR) is super important because it helps you determine the best exercise intensity for whatever workout you're doing.
 			</p>
 			 
@@ -1161,7 +1433,7 @@
 		});
 	});
 	</script>
-	<!--closing mhr script-->
+<!--closing mhr script-->
 
 
 
@@ -1172,7 +1444,7 @@
 
 
         	<div data-role="panel" id="menu" data-position="left" data-display="overlay" data-theme="b">
-					<!-- <div data-role="controlgroup"> -->
+					
 						<strong data-role="divider" data-theme="b">Menu</strong>
 						<a href="#home" data-role="button">Home</a>
 						<a href="#types" data-role="button">Types of HeartDiseases</a>
@@ -1180,15 +1452,15 @@
 						<a href="#healthtrack" data-role="button">Blood Pressure Reading Track</a>
 						<a href="#bp" data-role="button">Check Blood Pressure Readings</a>
 						<a href="#bmi" data-role="button">BMI and Max Heartrate Cal.</a>
-					<!--</div>-->
+
 			</div>
 
 			<div data-role="panel" id="option" data-position="right" data-display="overlay"  data-theme="b">
 					<div data-role="controlgroup">
 						<strong data-role="divider">Options</strong>
-						<a href="#" data-role="button" data-theme="a">About</a>
-						<a href="#" data-role="button" data-theme="a">Contact</a>
-						<a href="#" data-role="button"data-theme="a">Find Cardiac Unit</a>
+						<a href="#about" data-role="button">About</a>
+						<a href="#" data-role="button">Contact</a>
+						<a href="#locateuser data-role="button">Find Cardiac Unit</a>
 					</div>
 				</div>
 
@@ -1201,7 +1473,7 @@
 
 
 			<div data-role="main" class="ui-content ui_responsive">
-				<form>
+				<form id="submitquiz">
 					
 				    <legend><strong>1. How old are you?</strong></legend>
 
@@ -1351,7 +1623,9 @@
 			 location.reload();
 		});
 
-		$('#btnsubmit').on('click',function(){
+		$("#submitquiz").submit(function(e) {
+			e.preventDefault();
+
 			var ans1 = $("input[name='ansage']:checked").val();
 			var ans2 = $("input[name='ansgender']:checked").val();
 			var ans3 = $("input[name='anslifestyle']:checked").val();
