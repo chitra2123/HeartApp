@@ -14,7 +14,7 @@
 		chitra seedam
 	</author>
 
-	<plugin name="cordova-plugin-geolocation" spec="~4.0.1" />
+	<!-- <plugin name="cordova-plugin-geolocation" spec="~4.0.1" /> -->
 
 	<platform name="android">
 		<icon src="icon.png" density="ldpi" />
@@ -24,11 +24,17 @@
         <icon src="icon.png" density="xxhdpi" />
         <icon src="icon.png" density="xxxhdpi" />
 
-        <splash src="splash.png" density="ldpi" />
-		<splash src="splash.png" density="mdpi" />
-        <splash src="splash.png" density="hdpi" />
-        <splash src="splash.png" density="xhdpi" />
-        <splash src="splash.png" density="xxhdpi" />
-        <splash src="splash.png" density="xxxhdpi" />
+        <splash src="splash.png" density="land-ldpi" />
+		<splash src="splash.png" density="land-mdpi" />
+        <splash src="splash.png" density="land-hdpi" />
+        <splash src="splash.png" density="land-xhdpi" />
+        <splash src="splash.png" density="land-xxhdpi" />
+        <splash src="splash.png" density="land-xxxhdpi" />
+
+        <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.google.android.gms.location.sample.locationupdates" >
+		  <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+		  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+      	  <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+		</manifest>
 	</platform>
 </widget>
